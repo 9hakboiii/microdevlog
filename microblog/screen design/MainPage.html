@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevMicroBlog - Developer Community</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#10b981',
+                        dark: '#1e293b',
+                        light: '#f8fafc'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .post-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .code-block {
+            font-family: 'Courier New', monospace;
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+        }
+        .tag-chip {
+            transition: all 0.2s ease;
+        }
+        .tag-chip:hover {
+            transform: scale(1.05);
+            background-color: #3b82f6;
+            color: white;
+        }
+        .comment-reply {
+            border-left: 3px solid #3b82f6;
+        }
+        .markdown-content h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .markdown-content pre {
+            background-color: #2d2d2d;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        .markdown-content code {
+            background-color: #2d2d2d;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+        }
+        .markdown-content ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            margin: 1rem 0;
+        }
+        .markdown-content ol {
+            list-style-type: decimal;
+            padding-left: 1.5rem;
+            margin: 1rem 0;
+        }
+        .markdown-content blockquote {
+            border-left: 4px solid #3b82f6;
+            padding-left: 1rem;
+            margin: 1rem 0;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-slate-800">
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <div class="bg-primary w-8 h-8 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-code text-white"></i>
+                        </div>
+                        <span class="ml-2 text-xl font-bold text-dark">DevMicro<span class="text-primary">Blog</span></span>
+                    </div>
+                    <div class="hidden md:ml-6 md:flex md:space-x-8">
+                        <a href="#" class="border-primary text-dark inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium" id="nav-home">
+                            Home
+                        </a>
+                        <a href="#" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium" id="nav-trending">
+                            Trending
+                        </a>
+                        <a href="#" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium" id="nav-bookmarks">
+                            Bookmarks
+                        </a>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <button type="button" class="relative inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" id="create-post-btn">
+                            <i class="fas fa-plus mr-2"></i> New Post
+                        </button>
+                    </div>
+                    <div class="ml-3 relative">
+                        <div>
+                            <button class="bg-gray-200 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" id="user-menu-button">
+                                <span class="sr-only">Open user menu</span>
+                                <div class="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-white font-semibold">JS</div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex flex-col md:flex-row gap-8">
+            <!-- Left Sidebar -->
+            <div class="md:w-1/4 lg:w-1/5 space-y-6">
+                <!-- User Profile Card -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <div class="flex flex-col items-center">
+                        <div class="h-16 w-16 rounded-full bg-primary flex items-center justify-center text-white text-2xl font-bold mb-3">JS</div>
+                        <h3 class="text-lg font-bold text-center">John Smith</h3>
+                        <p class="text-gray-500 text-sm text-center">Full Stack Developer</p>
+                        <div class="mt-4 flex space-x-4">
+                            <div class="text-center">
+                                <p class="font-bold">42</p>
+                                <p class="text-xs text-gray-500">Posts</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="font-bold">128</p>
+                                <p class="text-xs text-gray-500">Followers</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="font-bold">87</p>
+                                <p class="text-xs text-gray-500">Following</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trending Tags -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h3 class="font-bold text-lg mb-4">Trending Tags</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="tag-chip bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full cursor-pointer">#javascript</span>
+                        <span class="tag-chip bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full cursor-pointer">#reactjs</span>
+                        <span class="tag-chip bg-purple-100 text-purple-800 text-xs px-3 py-1 rounded-full cursor-pointer">#python</span>
+                        <span class="tag-chip bg-yellow-100 text-yellow-800 text-xs px-3 py-1 rounded-full cursor-pointer">#webdev</span>
+                        <span class="tag-chip bg-red-100 text-red-800 text-xs px-3 py-1 rounded-full cursor-pointer">#docker</span>
+                        <span class="tag-chip bg-indigo-100 text-indigo-800 text-xs px-3 py-1 rounded-full cursor-pointer">#tailwindcss</span>
+                        <span class="tag-chip bg-pink-100 text-pink-800 text-xs px-3 py-1 rounded-full cursor-pointer">#ai</span>
+                        <span class="tag-chip bg-teal-100 text-teal-800 text-xs px-3 py-1 rounded-full cursor-pointer">#github</span>
+                    </div>
+                </div>
+
+                <!-- GitHub Integration -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h3 class="font-bold text-lg mb-2">GitHub Integration</h3>
+                    <p class="text-sm text-gray-600 mb-4">Connect your GitHub account to showcase your projects</p>
+                    <button class="w-full bg-gray-800 hover:bg-black text-white py-2 px-4 rounded-md flex items-center justify-center">
+                        <i class="fab fa-github mr-2"></i> Connect GitHub
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Feed -->
+            <div class="md:w-2/4 lg:w-3/5">
+                <!-- Create Post Card -->
+                <div class="bg-white rounded-xl shadow-sm mb-6" id="create-post-card">
+                    <div class="p-6">
+                        <div class="flex items-start space-x-4">
+                            <div class="flex-shrink-0">
+                                <div class="h-10 w-10 rounded-full bg-primary flex items-center justify-center text-white font-semibold">JS</div>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <button class="w-full text-left text-gray-500 border border-gray-300 rounded-lg px-4 py-2 hover:border-gray-400 focus:outline-none" id="open-editor-btn">
+                                    Share your thoughts or code snippet...
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Post Feed -->
+                <div id="post-feed">
+                    <!-- Post 1 -->
+                    <div class="post-card bg-white rounded-xl shadow-sm mb-6 overflow-hidden">
+                        <div class="p-6">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-start space-x-3">
+                                    <div class="flex-shrink-0">
+                                        <div class="h-10 w-10 rounded-full bg-green-500 flex items-center justify-center text-white font-semibold">ML</div>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold">Mary Lee</h4>
+                                        <p class="text-gray-500 text-sm">Posted 3 hours ago</p>
+                                    </div>
+                                </div>
+                                <button class="text-gray-400 hover:text-gray-600">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <h3 class="text-xl font-bold mb-2">Understanding React Hooks Performance</h3>
+                                
+                                <!-- AI Summary -->
+                                <div class="bg-blue-50 border-l-4 border-primary p-4 rounded-r-lg mb-4">
+                                    <div class="flex items-start">
+                                        <div class="flex-shrink-0">
+                                            <i class="fas fa-robot text-primary text-lg mt-1"></i>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="text-sm font-medium text-primary">AI Summary</p>
+                                            <p class="text-sm text-gray-700 mt-1">React Hooks optimize performance by reducing component complexity. Proper use of useMemo and useCallback prevents unnecessary re-renders. Custom hooks enable reusable stateful logic across components.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Post Content -->
+                                <div class="markdown-content mb-4">
+                                    <p>When working with React Hooks, it's crucial to understand their performance implications. Here's a common pattern I see:</p>
+                                    
+                                    <pre class="code-block p-4 rounded-lg mt-3"><code>function MyComponent() {
+  const [data, setData] = useState(null);
+  
+  // ❌ Avoid: This runs on every render
+  const processedData = processData(data);
+  
+  // ✅ Better: Memoize expensive calculations
+  const processedData = useMemo(() => processData(data), [data]);
+  
+  return &lt;div&gt;{processedData}&lt;/div&gt;;
+}</code></pre>
+                                    
+                                    <p>Using <code>useMemo</code> prevents recalculating on every render when dependencies haven't changed.</p>
+                                </div>
+                                
+                                <!-- Tags -->
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="tag-chip bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full cursor-pointer">#reactjs</span>
+                                    <span class="tag-chip bg-purple-100 text-purple-800 text-xs px-3 py-1 rounded-full cursor-pointer">#performance</span>
+                                    <span class="tag-chip bg-yellow-100 text-yellow-800 text-xs px-3 py-1 rounded-full cursor-pointer">#hooks</span>
+                                    <span class="tag-chip bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full cursor-pointer">#javascript</span>
+                                </div>
+                                
+                                <!-- Actions -->
+                                <div class="flex justify-between border-t border-gray-200 pt-4">
+                                    <div class="flex space-x-4">
+                                        <button class="flex items-center text-gray-500 hover:text-blue-500">
+                                            <i class="far fa-comment mr-1"></i>
+                                            <span>24</span>
+                                        </button>
+                                        <button class="flex items-center text-gray-500 hover:text-green-500">
+                                            <i class="fas fa-retweet mr-1"></i>
+                                            <span>8</span>
+                                        </button>
+                                        <button class="flex items-center text-gray-500 hover:text-red-500">
+                                            <i class="far fa-heart mr-1"></i>
+                                            <span>42</span>
+                                        </button>
+                                    </div>
+                                    <button class="flex items-center text-gray-500 hover:text-yellow-500 bookmark-btn" data-post="1">
+                                        <i class="far fa-bookmark mr-1"></i>
+                                        <span>Save</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Comments Section -->
+                        <div class="bg-gray-50 px-6 py-4">
+                            <div class="flex items-start space-x-3 mb-4">
+                                <div class="flex-shrink-0">
+                                    <div class="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-semibold">JS</div>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="bg-white rounded-lg border border-gray-200">
+                                        <textarea class="w-full px-4 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Add a comment..." rows="2"></textarea>
+                                        <div class="flex justify-end p-2">
+                                            <button class="bg-primary text-white px-4 py-1 rounded-md text-sm">Post</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Existing Comments -->
+                            <div class="space-y-4">
+                                <div class="flex items-start space-x-3">
+                                    <div class="flex-shrink-0">
+                                        <div class="h-8 w-8 rounded-full bg-indigo-500 flex items-center justify-center text-white text-xs font-semibold">TS</div>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="bg-white rounded-lg p-3">
+                                            <div class="flex justify-between">
+                                                <h4 class="font-bold">Tom Smith</h4>
+                                                <span class="text-gray-500 text-sm">2 hours ago</span>
+                                            </div>
+                                            <p class="mt-1">Great example! I'd also recommend using React DevTools Profiler to identify unnecessary re-renders.</p>
+                                            <div class="mt-2 flex items-center text-sm text-gray-500">
+                                                <button class="flex items-center hover:text-primary">
+                                                    <i class="far fa-thumbs-up mr-1"></i> 5
+                                                </button>
+                                                <button class="flex items-center ml-3 hover:text-primary reply-btn">
+                                                    <i class="far fa-comment mr-1"></i> Reply
+                                                </button>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Reply -->
+                                        <div class="comment-reply mt-3 ml-4 pl-4">
+                                            <div class="flex items-start space-x-3">
+                                                <div class="flex-shrink-0">
+                                                    <div class="h-8 w-8 rounded-full bg-green-500 flex items-center justify-center text-white text-xs font-semibold">ML</div>
+                                                </div>
+                                                <div class="flex-1">
+                                                    <div class="bg-white rounded-lg p-3">
+                                                        <div class="flex justify-between">
+                                                            <h4 class="font-bold">Mary Lee</h4>
+                                                            <span class="text-gray-500 text-sm">1 hour ago</span>
+                                                        </div>
+                                                        <p class="mt-1">Thanks Tom! The Profiler is indeed essential for performance optimization.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Post 2 -->
+                    <div class="post-card bg-white rounded-xl shadow-sm mb-6 overflow-hidden">
+                        <div class="p-6">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-start space-x-3">
+                                    <div class="flex-shrink-0">
+                                        <div class="h-10 w-10 rounded-full bg-purple-500 flex items-center justify-center text-white font-semibold">AR</div>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold">Alex Rivera</h4>
+                                        <p class="text-gray-500 text-sm">Posted 1 day ago</p>
+                                    </div>
+                                </div>
+                                <button class="text-gray-400 hover:text-gray-600">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <h3 class="text-xl font-bold mb-2">Python Type Hinting Best Practices</h3>
+                                
+                                <!-- AI Summary -->
+                                <div class="bg-blue-50 border-l-4 border-primary p-4 rounded-r-lg mb-4">
+                                    <div class="flex items-start">
+                                        <div class="flex-shrink-0">
+                                            <i class="fas fa-robot text-primary text-lg mt-1"></i>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="text-sm font-medium text-primary">AI Summary</p>
+                                            <p class="text-sm text-gray-700 mt-1">Python type hints improve code readability and maintainability. Use generics for container types and Union for multiple types. Type checkers like mypy enforce correctness.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Post Content -->
+                                <div class="markdown-content mb-4">
+                                    <p>Type hints have become essential in modern Python development. Here are some best practices:</p>
+                                    
+                                    <pre class="code-block p-4 rounded-lg mt-3"><code>from typing import List, Dict, Optional
+
+def process_items(
+    items: List[str], 
+    prices: Dict[str, float]
+) -> Optional[float]:
+    # Process items and return total price
+    total = sum(prices.get(item, 0.0) for item in items)
+    return total if total > 0 else None</code></pre>
+                                    
+                                    <p>Key points:</p>
+                                    <ul>
+                                        <li>Use <code>Optional</code> for values that can be None</li>
+                                        <li>Specify container types with generics</li>
+                                        <li>Run mypy regularly in your CI pipeline</li>
+                                    </ul>
+                                </div>
+                                
+                                <!-- Tags -->
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="tag-chip bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full cursor-pointer">#python</span>
+                                    <span class="tag-chip bg-purple-100 text-purple-800 text-xs px-3 py-1 rounded-full cursor-pointer">#typing</span>
+                                    <span class="tag-chip bg-yellow-100 text-yellow-800 text-xs px-3 py-1 rounded-full cursor-pointer">#bestpractices</span>
+                                </div>
+                                
+                                <!-- Actions -->
+                                <div class="flex justify-between border-t border-gray-200 pt-4">
+                                    <div class="flex space-x-4">
+                                        <button class="flex items-center text-gray-500 hover:text-blue-500">
+                                            <i class="far fa-comment mr-1"></i>
+                                            <span>16</span>
+                                        </button>
+                                        <button class="flex items-center text-gray-500 hover:text-green-500">
+                                            <i class="fas fa-retweet mr-1"></i>
+                                            <span>5</span>
+                                        </button>
+                                        <button class="flex items-center text-gray-500 hover:text-red-500">
+                                            <i class="far fa-heart mr-1"></i>
+                                            <span>38</span>
+                                        </button>
+                                    </div>
+                                    <button class="flex items-center text-gray-500 hover:text-yellow-500 bookmark-btn" data-post="2">
+                                        <i class="far fa-bookmark mr-1"></i>
+                                        <span>Save</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Load More -->
+                <div class="text-center mt-6">
+                    <button class="bg-white border border-gray-300 text-gray-700 px-6 py-2 rounded-md hover:bg-gray-50">
+                        Load More Posts
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Right Sidebar -->
+            <div class="md:w-1/4 lg:w-1/5 space-y-6">
+                <!-- AI Features Card -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h3 class="font-bold text-lg mb-4">AI-Powered Features</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1">
+                                <i class="fas fa-robot text-primary"></i>
+                            </div>
+                            <div class="ml-3">
+                                <h4 class="font-medium">Auto-Summary</h4>
+                                <p class="text-sm text-gray-600">AI generates concise summaries of your posts</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1">
+                                <i class="fas fa-tags text-primary"></i>
+                            </div>
+                            <div class="ml-3">
+                                <h4 class="font-medium">Smart Tagging</h4>
+                                <p class="text-sm text-gray-600">Relevant tags suggested automatically</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1">
+                                <i class="fas fa-lightbulb text-primary"></i>
+                            </div>
+                            <div class="ml-3">
+                                <h4 class="font-medium">Code Analysis</h4>
+                                <p class="text-sm text-gray-600">Get insights on your code snippets</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Community Stats -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h3 class="font-bold text-lg mb-4">Community Stats</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span>Total Posts</span>
+                            <span class="font-bold">12,842</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Active Users</span>
+                            <span class="font-bold">3,215</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Comments Today</span>
+                            <span class="font-bold">1,247</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Code Snippets</span>
+                            <span class="font-bold">8,936</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- GitHub Activity -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h3 class="font-bold text-lg mb-4">GitHub Activity</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1">
+                                <i class="fab fa-github text-gray-800"></i>
+                            </div>
+                            <div class="ml-3">
+                                <h4 class="font-medium">react-project</h4>
+                                <p class="text-sm text-gray-600">Updated 2 hours ago</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1">
+                                <i class="fab fa-github text-gray-800"></i>
+                            </div>
+                            <div class="ml-3">
+                                <h4 class="font-medium">python-toolkit</h4>
+                                <p class="text-sm text-gray-600">Updated 1 day ago</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="w-full mt-4 text-center text-primary font-medium hover:underline">
+                        View All Activity
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Create Post Modal -->
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" id="create-post-modal">
+        <div class="bg-white rounded-xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col">
+            <div class="p-4 border-b flex justify-between items-center">
+                <h3 class="text-lg font-bold">Create New Post</h3>
+                <button id="close-modal-btn" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="flex-1 overflow-auto p-6">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="post-title">
+                        Title
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="post-title" type="text" placeholder="Post title">
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="post-content">
+                        Content
+                    </label>
+                    <div class="border rounded-md overflow-hidden">
+                        <div class="flex border-b">
+                            <button class="px-3 py-2 text-gray-600 hover:bg-gray-100">
+                                <i class="fas fa-bold"></i>
+                            </button>
+                            <button class="px-3 py-2 text-gray-600 hover:bg-gray-100">
+                                <i class="fas fa-italic"></i>
+                            </button>
+                            <button class="px-3 py-2 text-gray-600 hover:bg-gray-100">
+                                <i class="fas fa-link"></i>
+                            </button>
+                            <button class="px-3 py-2 text-gray-600 hover:bg-gray-100">
+                                <i class="fas fa-code"></i>
+                            </button>
+                            <button class="px-3 py-2 text-gray-600 hover:bg-gray-100">
+                                <i class="fas fa-image"></i>
+                            </button>
+                        </div>
+                        <textarea class="w-full h-48 p-4 focus:outline-none" id="post-content" placeholder="Write your post here... Markdown supported"></textarea>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">
+                        Tags
+                    </label>
+                    <div class="flex flex-wrap gap-2 mb-2" id="selected-tags">
+                        <span class="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full flex items-center">
+                            #reactjs
+                            <button class="ml-1 text-blue-800 hover:text-blue-900">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </span>
+                    </div>
+                    <div class="relative">
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="tag-input" type="text" placeholder="Add tags...">
+                        <div class="absolute right-3 top-2">
+                            <button class="text-gray-500 hover:text-primary" id="ai-tags-btn">
+                                <i class="fas fa-magic mr-1"></i> AI Suggest
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-blue-50 border-l-4 border-primary p-4 rounded-r-lg mb-4 hidden" id="ai-summary-section">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-robot text-primary text-lg mt-1"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-primary">AI Summary</p>
+                            <p class="text-sm text-gray-700 mt-1" id="ai-summary-text">Summary will be generated here...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 border-t flex justify-between">
+                <div>
+                    <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200" id="ai-summary-btn">
+                        <i class="fas fa-robot mr-2"></i> Generate AI Summary
+                    </button>
+                </div>
+                <div>
+                    <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 mr-2">
+                        Save Draft
+                    </button>
+                    <button class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700">
+                        Publish Post
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const createPostBtn = document.getElementById('open-editor-btn');
+        const createPostModal = document.getElementById('create-post-modal');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const aiSummaryBtn = document.getElementById('ai-summary-btn');
+        const aiSummarySection = document.getElementById('ai-summary-section');
+        const aiSummaryText = document.getElementById('ai-summary-text');
+        const aiTagsBtn = document.getElementById('ai-tags-btn');
+        const bookmarkButtons = document.querySelectorAll('.bookmark-btn');
+        
+        // Open create post modal
+        createPostBtn.addEventListener('click', () => {
+            createPostModal.classList.remove('hidden');
+        });
+        
+        // Close modal
+        closeModalBtn.addEventListener('click', () => {
+            createPostModal.classList.add('hidden');
+        });
+        
+        // Generate AI summary
+        aiSummaryBtn.addEventListener('click', () => {
+            aiSummarySection.classList.remove('hidden');
+            aiSummaryText.textContent = "React Hooks provide a powerful way to manage state and side effects in functional components. This post explores best practices for optimizing performance with useMemo and useCallback to prevent unnecessary re-renders.";
+        });
+        
+        // Generate AI tags
+        aiTagsBtn.addEventListener('click', () => {
+            const selectedTags = document.getElementById('selected-tags');
+            selectedTags.innerHTML = `
+                <span class="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full flex items-center">
+                    #reactjs
+                    <button class="ml-1 text-blue-800 hover:text-blue-900">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </span>
+                <span class="bg-purple-100 text-purple-800 text-xs px-3 py-1 rounded-full flex items-center">
+                    #performance
+                    <button class="ml-1 text-purple-800 hover:text-purple-900">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </span>
+                <span class="bg-yellow-100 text-yellow-800 text-xs px-3 py-1 rounded-full flex items-center">
+                    #hooks
+                    <button class="ml-1 text-yellow-800 hover:text-yellow-900">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </span>
+            `;
+        });
+        
+        // Bookmark functionality
+        bookmarkButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                const text = this.querySelector('span');
+                
+                if (icon.classList.contains('far')) {
+                    icon.classList.remove('far');
+                    icon.classList.add('fas');
+                    this.classList.remove('text-gray-500');
+                    this.classList.add('text-yellow-500');
+                    text.textContent = 'Saved';
+                } else {
+                    icon.classList.remove('fas');
+                    icon.classList.add('far');
+                    this.classList.remove('text-yellow-500');
+                    this.classList.add('text-gray-500');
+                    text.textContent = 'Save';
+                }
+            });
+        });
+        
+        // Reply functionality
+        const replyButtons = document.querySelectorAll('.reply-btn');
+        replyButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const commentBox = this.closest('.bg-white').nextElementSibling;
+                if (commentBox && commentBox.classList.contains('hidden')) {
+                    commentBox.classList.remove('hidden');
+                } else {
+                    const newCommentBox = document.createElement('div');
+                    newCommentBox.className = 'mt-3 flex items-start space-x-3';
+                    newCommentBox.innerHTML = `
+                        <div class="flex-shrink-0">
+                            <div class="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-semibold">JS</div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="bg-white rounded-lg border border-gray-200">
+                                <textarea class="w-full px-4 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Write your reply..." rows="2"></textarea>
+                                <div class="flex justify-end p-2">
+                                    <button class="bg-gray-200 text-gray-700 px-4 py-1 rounded-md text-sm mr-2">Cancel</button>
+                                    <button class="bg-primary text-white px-4 py-1 rounded-md text-sm">Reply</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    this.closest('.flex-1').appendChild(newCommentBox);
+                }
+            });
+        });
+        
+        // Tag filtering
+        const tagChips = document.querySelectorAll('.tag-chip');
+        tagChips.forEach(chip => {
+            chip.addEventListener('click', function() {
+                // Remove active class from all tags
+                tagChips.forEach(c => c.classList.remove('bg-primary', 'text-white'));
+                
+                // Add active class to clicked tag
+                this.classList.add('bg-primary', 'text-white');
+                
+                // Filter posts by tag (simulated)
+                alert(`Filtering posts by tag: ${this.textContent}`);
+            });
+        });
+        
+        // Simulate infinite scroll
+        window.addEventListener('scroll', () => {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
+                // In a real app, this would fetch more posts
+                console.log("Loading more posts...");
+            }
+        });
+    </script>
+</body>
+</html>
