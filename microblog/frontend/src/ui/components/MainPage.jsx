@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCode,
   faPlus,
@@ -16,19 +16,19 @@ import {
   faImage,
   faMagic,
   faTimes,
-} from '@fortawesome/free-solid-svg-icons'
-import { faGithub } from '@fortawesome/free-brands-svg-icons'
+} from '@fortawesome/free-solid-svg-icons';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import {
   faComment as farComment,
   faHeart as farHeart,
   faBookmark as farBookmark,
   faThumbsUp as farThumbsUp,
-} from '@fortawesome/free-regular-svg-icons'
+} from '@fortawesome/free-regular-svg-icons';
 
 const MainPage = () => {
-  const [showCreateModal, setShowCreateModal] = useState(false)
-  const [showAiSummary, setShowAiSummary] = useState(false)
-  const [selectedTags, setSelectedTags] = useState(['#reactjs'])
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showAiSummary, setShowAiSummary] = useState(false);
+  const [selectedTags, setSelectedTags] = useState(['#reactjs']);
   const [posts, setPosts] = useState([
     {
       id: 1,
@@ -95,30 +95,30 @@ Key points:
       likes: 38,
       bookmarked: false,
     },
-  ])
+  ]);
 
-  const trendingTags = ['#javascript', '#reactjs', '#python', '#webdev', '#docker', '#tailwindcss', '#ai', '#github']
+  const trendingTags = ['#javascript', '#reactjs', '#python', '#webdev', '#docker', '#tailwindcss', '#ai', '#github'];
 
   const handleBookmark = (postId) => {
-    setPosts(posts.map((post) => (post.id === postId ? { ...post, bookmarked: !post.bookmarked } : post)))
-  }
+    setPosts(posts.map((post) => (post.id === postId ? { ...post, bookmarked: !post.bookmarked } : post)));
+  };
 
   const handleCreatePost = () => {
-    setShowCreateModal(true)
-  }
+    setShowCreateModal(true);
+  };
 
   const handleCloseModal = () => {
-    setShowCreateModal(false)
-    setShowAiSummary(false)
-  }
+    setShowCreateModal(false);
+    setShowAiSummary(false);
+  };
 
   const handleGenerateAiSummary = () => {
-    setShowAiSummary(true)
-  }
+    setShowAiSummary(true);
+  };
 
   const handleGenerateAiTags = () => {
-    setSelectedTags(['#reactjs', '#performance', '#hooks'])
-  }
+    setSelectedTags(['#reactjs', '#performance', '#hooks']);
+  };
 
   return (
     <div className="bg-gray-50 text-slate-800 min-h-screen">
@@ -190,7 +190,7 @@ Key points:
             {/* User Profile Card */}
             <div className="bg-white rounded-xl shadow-sm p-6">
               <div className="flex flex-col items-center">
-                <div className="h-16 w-16 rounded-full bg-blue-500 flex items-center justify-center text-white text-2xl font-bold mb-3">
+                <div className="h-16 w-16 rounded-full bg-blue-500 flex items-center justify-content-center text-white text-2xl font-bold mb-3">
                   JS
                 </div>
                 <h3 className="text-lg font-bold text-center">John Smith</h3>
@@ -216,14 +216,14 @@ Key points:
             <div className="bg-white rounded-xl shadow-sm p-6">
               <h3 className="font-bold text-lg mb-4">Trending Tags</h3>
               <div className="flex flex-wrap gap-2">
-                {trendingTags.map((tag, index) => (
-                  <span
-                    key={index}
-                    className="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full cursor-pointer hover:bg-blue-200 transition-all duration-200"
-                  >
-                    {tag}
-                  </span>
-                ))}
+                <span className="tag-chip bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full cursor-pointer hover:bg-blue-200 transition-all duration-200">#javascript</span>
+                <span className="tag-chip bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full cursor-pointer hover:bg-green-200 transition-all duration-200">#reactjs</span>
+                <span className="tag-chip bg-purple-100 text-purple-800 text-xs px-3 py-1 rounded-full cursor-pointer hover:bg-purple-200 transition-all duration-200">#python</span>
+                <span className="tag-chip bg-yellow-100 text-yellow-800 text-xs px-3 py-1 rounded-full cursor-pointer hover:bg-yellow-200 transition-all duration-200">#webdev</span>
+                <span className="tag-chip bg-red-100 text-red-800 text-xs px-3 py-1 rounded-full cursor-pointer hover:bg-red-200 transition-all duration-200">#docker</span>
+                <span className="tag-chip bg-indigo-100 text-indigo-800 text-xs px-3 py-1 rounded-full cursor-pointer hover:bg-indigo-200 transition-all duration-200">#tailwindcss</span>
+                <span className="tag-chip bg-pink-100 text-pink-800 text-xs px-3 py-1 rounded-full cursor-pointer hover:bg-pink-200 transition-all duration-200">#ai</span>
+                <span className="tag-chip bg-teal-100 text-teal-800 text-xs px-3 py-1 rounded-full cursor-pointer hover:bg-teal-200 transition-all duration-200">#github</span>
               </div>
             </div>
 
@@ -377,12 +377,12 @@ Key points:
         />
       )}
     </div>
-  )
-}
+  );
+};
 
 // Post Card Component
 const PostCard = ({ post, onBookmark }) => {
-  const [showComments, setShowComments] = useState(false)
+  const [showComments, setShowComments] = useState(false);
 
   return (
     <div className="bg-white rounded-xl shadow-sm mb-6 overflow-hidden hover:shadow-md transition-shadow duration-300">
@@ -493,8 +493,8 @@ const PostCard = ({ post, onBookmark }) => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
 // Create Post Modal Component
 const CreatePostModal = ({ onClose, showAiSummary, onGenerateAiSummary, onGenerateAiTags, selectedTags }) => {
@@ -605,8 +605,8 @@ const CreatePostModal = ({ onClose, showAiSummary, onGenerateAiSummary, onGenera
               className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200"
               onClick={onGenerateAiSummary}
             >
-              <FontAwesomeIcon icon={faRobot} className="mr-2" />
-              Generate AI Summary
+                             <FontAwesomeIcon icon={faRobot} className="mr-2" />
+               Generate AI Summary
             </button>
           </div>
           <div>
@@ -618,7 +618,7 @@ const CreatePostModal = ({ onClose, showAiSummary, onGenerateAiSummary, onGenera
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default MainPage
+export default MainPage;
