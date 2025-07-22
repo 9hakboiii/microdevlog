@@ -7,7 +7,7 @@ import eslintPluginImport from 'eslint-plugin-import'
 export default [
   // 프로젝트의 빌드 폴더(예: dist) 무시
   { ignores: ['dist'] },
-  
+
   {
     // .js, .jsx 파일에 대한 설정
     files: ['**/*.{js,jsx,ts,tsx}'],
@@ -28,7 +28,7 @@ export default [
     rules: {
       // 기본 eslint 규칙
       ...js.configs.recommended.rules,
-      
+
       // React Hooks 규칙
       ...reactHooks.configs.recommended.rules,
 
@@ -36,10 +36,7 @@ export default [
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
 
       // React Refresh 설정
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
 
       // 임포트 규칙 설정
       'import/no-unresolved': 'error', // 임포트 경로 오류 잡기
