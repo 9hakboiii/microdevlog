@@ -28,4 +28,4 @@ dist-ssr
 .env.local
 
 # mcp
-figma_MCP/*
+figma_MCP
