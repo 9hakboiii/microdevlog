@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 
     # DRF 관련
     'rest_framework', # simplejwt 포함
+    'rest_framework.authtoken',
     # 'rest_framework_simplejwt.token_blacklist', # JWT blacklist(선택)
 
     # Third-party 관련
@@ -61,7 +62,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.github',
 
     # 사용자 앱
-    'account',
+    'accounts',
     'blog',
     'community',
     'audit',
@@ -117,7 +118,7 @@ env = environ.Env(
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgrewql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': env('POSTGRES_DB'),
         'USER': env('POSTGRES_USER'),
         'PASSWORD': env('POSTGRES_PASSWORD'),
