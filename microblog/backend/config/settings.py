@@ -124,6 +124,10 @@ DATABASES = {
         'PASSWORD': env('POSTGRES_PASSWORD'),
         'HOST': env('POSTGRES_HOST', default='localhost'),
         'PORT': env('POSTGRES_PORT', default='5432'),
+        'OPTIONS': {
+            # libpq에 인코딩을 UTF-8로 설정하도록 지시
+            'options': '-c client_encoding=UTF8'
+        }
     }
 }
 
