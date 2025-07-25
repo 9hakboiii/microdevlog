@@ -12,10 +12,13 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 from datetime import timedelta
+from pathlib import Path
 import environ
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -28,6 +31,12 @@ SECRET_KEY = 'django-insecure-rn21&xzf9$@pn#t#6cyu@a(bon4imc^)o)&2pa^)i6qgns6m_)
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+# django-environ 초기화
+env = environ.Env(
+    DEBUG=(bool, False) # 타입 및 기본값 지정(선택)
+)
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 
 # Application definition
@@ -110,12 +119,6 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# django-environ 초기화
-env = environ.Env(
-    DEBUG=(bool, False) # 타입 및 기본값 지정(선택)
-)
-
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -130,6 +133,15 @@ DATABASES = {
         }
     }
 }
+
+# Celery 설정 
+CELERY_BROKER_URL = env('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND')
+
+# Optional: 작업 결과 JSON 직렬화
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['json']
 
 
 # Password validation
