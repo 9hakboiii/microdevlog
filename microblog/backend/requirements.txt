@@ -1,6 +1,7 @@
 asgiref==3.9.0
 attrs==25.3.0
 black==25.1.0
+celery==5.5.3
 certifi==2025.7.14
 cffi==1.17.1
 charset-normalizer==3.4.2
@@ -35,6 +36,7 @@ psycopg2-binary==2.9.10
 pycparser==2.22
 PyJWT==2.10.1
 PyYAML==6.0.2
+redis==6.2.0
 referencing==0.36.2
 regex==2024.11.6
 requests==2.32.4
